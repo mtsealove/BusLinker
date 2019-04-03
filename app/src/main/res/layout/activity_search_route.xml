@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawerLayout"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".SearchRouteActivity">
+    tools:context=".Search.SearchRouteActivity">
 <LinearLayout
     android:orientation="vertical"
     android:id="@+id/main_content"
@@ -82,4 +84,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </LinearLayout>
+            <kr.ac.gachon.www.buslinker.Views.SlideMenu
+                android:layout_gravity="start"
+                android:layout_width="300dp"
+                android:layout_height="match_parent" />
 </android.support.v4.widget.DrawerLayout>

@@ -1,11 +1,8 @@
-package kr.ac.gachon.www.buslinker;
+package kr.ac.gachon.www.buslinker.Search;
 
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,21 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 import kr.ac.gachon.www.buslinker.Fragments.SearchExpressFragment;
 import kr.ac.gachon.www.buslinker.Fragments.SearchIntercityFragment;
+import kr.ac.gachon.www.buslinker.R;
+import kr.ac.gachon.www.buslinker.Views.SystemUiTuner;
 
 public class SearchRouteActivity extends AppCompatActivity {
+    Button panelBtn;
+    android.support.v4.widget.DrawerLayout drawerLayout;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
@@ -45,6 +39,17 @@ public class SearchRouteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_route);
+
+        SystemUiTuner systemUiTuner=new SystemUiTuner(SearchRouteActivity.this);
+        systemUiTuner.setStatusBarWhite();
+        drawerLayout=findViewById(R.id.drawerLayout);
+        panelBtn=findViewById(R.id.panelBtn);
+        panelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
