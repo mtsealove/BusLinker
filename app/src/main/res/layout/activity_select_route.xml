@@ -15,12 +15,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <Button
                 android:id="@+id/panelBtn"
-                android:layout_margin="15dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/panel"/>
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/panel" />
 
             <LinearLayout
                 android:gravity="center"
@@ -30,9 +34,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/bus_linker_icon"/>
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/bus_linker_icon" />
 
                 <TextView
                     android:layout_marginLeft="10dp"
@@ -50,97 +54,190 @@
                 android:background="@color/gray" />
         </RelativeLayout>
 
-        <!--고속인지 시외인지 표시-->
+                <!--고속인지 시외인지 표시-->
+                <LinearLayout
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/expressTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="고속버스"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/intercityTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/light_gray"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="시외버스"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <!--출발/도착 정보 표시-->
+                <RelativeLayout
+                    android:layout_marginTop="15dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/stIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/circle_border"
+                        android:gravity="center"
+                        android:text="출발"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/depTmnNmTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_toRightOf="@id/stIcon"
+                        android:gravity="center"
+                        android:text="출발터미널"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:id="@+id/stick"
+                        android:layout_marginTop="-5dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_below="@id/stIcon"
+                        android:layout_width="2dp"
+                        android:layout_height="16dp"
+                        android:background="@color/colorPrimary"/>
+
+                    <TextView
+                        android:id="@+id/dtIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/stick"
+                        android:layout_marginTop="-5dp"
+                        android:background="@drawable/circle_border"
+                        android:gravity="center"
+                        android:text="도착"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/arrTmnNmTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="71dp"
+                        android:layout_toRightOf="@id/dtIcon"
+                        android:gravity="center"
+                        android:text="도착터미널"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <!--날짜 선택 란-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/previousBtn"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="@drawable/left_arrow"
+                        android:layout_width="21dp"
+                        android:layout_height="30dp" />
+                    <!--날짜 표시-->
+                    <TextView
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/dateTV"
+                        android:text="2019.5.1 수요일"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                   <Button
+                       android:id="@+id/nextBtn"
+                       android:layout_alignParentRight="true"
+                       android:layout_width="21dp"
+                       android:layout_height="30dp"
+                       android:background="@drawable/right_arrow"
+                       android:layout_marginVertical="10dp"
+                       android:layout_marginRight="30dp"/>
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
         <LinearLayout
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginVertical="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
             <TextView
-                android:id="@+id/expressTV"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:padding="10dp"
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:textSize="20sp"
-                android:text="고속버스"/>
+                android:text="출발"/>
 
             <TextView
-                android:id="@+id/intercityTV"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:padding="10dp"
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/light_gray"
+                android:text="도착"/>
+
+            <TextView
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textColor="@color/black"
                 android:textSize="20sp"
-                android:text="시외버스"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회사"/>
 
         </LinearLayout>
-
-        <!--출발/도착 정보 표시-->
-        <RelativeLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="10dp"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="1.5dp"
+            android:src="@drawable/dashline"
+            android:layerType="software"/>
 
-            <TextView
-                android:id="@+id/stIcon"
-                android:gravity="center"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/circle_border"
-                android:text="출발"
-                android:textSize="18sp" />
+        <ListView
+            android:id="@+id/dispatchList"
+            android:divider="@drawable/dashline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
 
-            <TextView
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:layout_marginLeft="15dp"
-                android:text="출발터미널"
-                android:layout_toRightOf="@id/stIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
-
-            <View
-                android:id="@+id/stick"
-                android:layout_marginTop="-5dp"
-                android:layout_marginLeft="30dp"
-                android:layout_below="@id/stIcon"
-                android:layout_width="2dp"
-                android:layout_height="20dp"
-                android:background="@color/colorPrimary"/>
-
-            <TextView
-                android:layout_marginTop="-5dp"
-                android:layout_below="@id/stick"
-                android:id="@+id/dtIcon"
-                android:gravity="center"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/circle_border"
-                android:text="도착"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_marginTop="90dp"
-                android:gravity="center"
-                android:layout_marginLeft="15dp"
-                android:text="도착터미널"
-                android:layout_toRightOf="@id/dtIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
-        </RelativeLayout>
     </LinearLayout>
 
     <kr.ac.gachon.www.buslinker.Views.SlideMenu

@@ -15,8 +15,8 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/bus_linker_icon"/>
 
         <TextView

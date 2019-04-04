@@ -11,18 +11,21 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import kr.ac.gachon.www.buslinker.R;
 import kr.ac.gachon.www.buslinker.Search.SearchTerminalActivity;
+import kr.ac.gachon.www.buslinker.SelectRouteActivity;
+
 import static android.app.Activity.RESULT_OK;
 
 public class SearchExpressFragment extends Fragment {
     LinearLayout startLayout, destinationLayout, registrationLayout;
     TextView startTV, destinationTV, registrationTV;
-    Button swapBtn;
+    Button swapBtn, requestBtn;
     final String cat="express";
     final int ExpressStart=1, ExpressDestination=2;
 
@@ -48,6 +51,13 @@ public class SearchExpressFragment extends Fragment {
                 SwapTerminalCd();
             }
         });
+        requestBtn=view.findViewById(R.id.requestBtn);
+        requestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setRequestBtn();
+            }
+        });
 
         startLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +78,9 @@ public class SearchExpressFragment extends Fragment {
                 setRegistrationDate();
             }
         });
+        SetDefaultDate();
+
+
         return view;
     }
 
@@ -103,7 +116,7 @@ public class SearchExpressFragment extends Fragment {
 
     private void setRegistrationDate() {   //접수일 선택
         Date date=new Date();
-        SimpleDateFormat yearFormat=new SimpleDateFormat("yy");
+        SimpleDateFormat yearFormat=new SimpleDateFormat("yyyy");
         SimpleDateFormat monthFormat=new SimpleDateFormat("MM");
         SimpleDateFormat dayFormat=new SimpleDateFormat("dd");
         int year=Integer.parseInt(yearFormat.format(date));
@@ -113,12 +126,44 @@ public class SearchExpressFragment extends Fragment {
         DatePickerDialog dialog=new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                registrationDate=""+i+(i1+1)+i2;
+                registrationDate=""+i+"."+(i1+1)+"."+i2;
                 registrationTV.setText(i+"년 "+(i1+1)+"월 "+i2+"일");
             }
         },year, month, day);
         dialog.getDatePicker().setMinDate(date.getTime());
         dialog.show();
+    }
+
+    private void SetDefaultDate() {
+        Date date=new Date();
+        SimpleDateFormat yearFormat=new SimpleDateFormat("yyyy");
+        SimpleDateFormat monthFormat=new SimpleDateFormat("MM");
+        SimpleDateFormat dayFormat=new SimpleDateFormat("dd");
+        int year=Integer.parseInt(yearFormat.format(date));
+        int month=Integer.parseInt(monthFormat.format(date));
+        int day=Integer.parseInt(dayFormat.format(date));
+
+        registrationDate=year+"."+month+"."+day;
+        registrationTV.setText(year+"년"+month+"월"+day+"일");
+    }
+
+    private void setRequestBtn() {  //각 터미널 코드와 날짜 정보를 보내고 배차 선택화면 출력
+        if(startTmnCd==null) {  //출발지를 선택하지 않으면
+            Toast.makeText(getContext(), "출발지를 선택하세요", Toast.LENGTH_SHORT).show();
+        } else if(destinationTmnCd==null) { //도착지를 선택하지 않으면
+            Toast.makeText(getContext(), "도착지를 선택하세요", Toast.LENGTH_SHORT).show();
+        } else if(registrationDate==null) {
+            Toast.makeText(getContext(), "접수일을 선택하세요", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(getContext(), SelectRouteActivity.class);
+            intent.putExtra("depTmnCd", startTmnCd);    //출발 터미널 코드
+            intent.putExtra("depTmnNm", startTmnNm);    //출발 터미널 이름
+            intent.putExtra("arrTmnCd", destinationTmnCd);  //도착 터미널 코드
+            intent.putExtra("arrTmnNm", destinationTmnNm);  //도착 터미널 이름
+            intent.putExtra("RegistrationDate", registrationDate);  //접수일
+            intent.putExtra("cat", cat);    //고속버스임을 알림
+            startActivity(intent);  //액티비티 시작
+        }
     }
 
     @Override

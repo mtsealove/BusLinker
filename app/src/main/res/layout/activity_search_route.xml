@@ -20,12 +20,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/panelBtn"
-            android:layout_margin="15dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/panel"/>
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/panel" />
 
         <LinearLayout
             android:gravity="center"
@@ -35,9 +39,9 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/bus_linker_icon"/>
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/bus_linker_icon" />
 
             <TextView
                 android:layout_marginLeft="10dp"
