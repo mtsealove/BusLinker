@@ -1,6 +1,10 @@
 package kr.ac.gachon.www.buslinker.Search;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -18,6 +22,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,12 +32,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.buslinker.Entity.Terminal;
 import kr.ac.gachon.www.buslinker.R;
 import kr.ac.gachon.www.buslinker.Views.SystemUiTuner;
 
 public class SearchTerminalActivity extends AppCompatActivity {
     private String node, cat;
-    TextView titleTV, noResultTV;
+    TextView titleTV, noResultTV, searchResultTV;
     EditText searchET;
     Button searchBtn;
     ListView resultListView;
@@ -46,6 +53,7 @@ public class SearchTerminalActivity extends AppCompatActivity {
         resultListView=findViewById(R.id.resultLV);
         titleTV=findViewById(R.id.titleTV);
         noResultTV=findViewById(R.id.noResultTV);
+        searchResultTV=findViewById(R.id.searchResultTV);
 
         //상단바 색상 변경
         SystemUiTuner systemUiTuner=new SystemUiTuner(SearchTerminalActivity.this);
@@ -75,6 +83,10 @@ public class SearchTerminalActivity extends AppCompatActivity {
                 Search();
             }
         });
+
+        if(cat.equals("express")) {
+            showCloseExpressTerminal();
+        }
     }
 
     private void Search() {
@@ -88,10 +100,10 @@ public class SearchTerminalActivity extends AppCompatActivity {
         tmnCd=new ArrayList<>();
         terminalName= URLEncoder.encode(terminalName);
         final String key="MhyH4ySbB%2FINGpXIXZh63jG%2B5glyr88oqe58zxAnlTey8jLySc4lZzPO3mPS7bb1uIl7z7M9qIUEb65v1hl7Ug%3D%3D";
-        final String query="http://openapi.tago.go.kr/openapi/service/ExpBusArrInfoService/getExpBusTmnList?" +
+        final String query="http://openapi.tago.go.kr/openapi/service/ExpBusInfoService/getExpBusTrminlList?" +
                 "serviceKey="+key
                 +"&numOfRows=200"
-                +"&tmnNm="+terminalName;
+                +"&terminalNm="+terminalName;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -109,10 +121,10 @@ public class SearchTerminalActivity extends AppCompatActivity {
                         switch (eventType) {
                             case XmlPullParser.START_TAG:
                                 tag=xmlPullParser.getName();
-                                if(tag.equals("tmnCd")) {
+                                if(tag.equals("terminalId")) {
                                     xmlPullParser.next();
                                     tmnCd.add(xmlPullParser.getText());
-                                } else if(tag.equals("tmnNm")) {
+                                } else if(tag.equals("terminalNm")) {
                                     xmlPullParser.next();
                                     tmnNm.add(xmlPullParser.getText());;
                                 } break;
@@ -142,7 +154,7 @@ public class SearchTerminalActivity extends AppCompatActivity {
         int index=0;
         boolean exist=false;
         for(int i=0; i<tmnCd.size(); i++) { //동서울 터미널이 존재하는지 확인
-            if(tmnCd.get(i).equals("032")) {
+            if(tmnCd.get(i).equals("NAEK032")) {
                 exist=true;
                 index=i;
             }
@@ -153,6 +165,7 @@ public class SearchTerminalActivity extends AppCompatActivity {
         }
     }
     private void setTerminalList() {    //리스트뷰에 출력 및 클릭 이벤트 설정
+        searchResultTV.setText("검색 결과");
         if(tmnCd.size()==0){    //검색 결과가 없으면
             resultListView.setVisibility(View.GONE);
             noResultTV.setVisibility(View.VISIBLE);
@@ -176,6 +189,62 @@ public class SearchTerminalActivity extends AppCompatActivity {
         }
     }
 
+    ArrayList<Terminal> terminalArrayList;
+    private void ReadExpressFile() {    //터미널 위경도 파일 읽기
+        terminalArrayList=new ArrayList<>();
+        try {
+            BufferedReader br=new BufferedReader(new InputStreamReader(getAssets().open("terminal_latlang.dat")));
+            String tmp;
+            while((tmp=br.readLine())!=null) {
+                String tmnNm=tmp.split(",")[0];
+                String tmnCd=tmp.split(",")[1];
+                double latitude=Double.parseDouble(tmp.split(",")[2]);
+                double longitude=Double.parseDouble(tmp.split(",")[3]);
+                terminalArrayList.add(new Terminal(tmnNm, tmnCd, latitude, longitude));
+            }
+            br.close();
+            System.out.println("터미널 파일 읽음");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void showCloseExpressTerminal() {
+        ReadExpressFile();
+
+        LocationManager locationManager;
+        locationManager=(LocationManager)getSystemService(LOCATION_SERVICE);
+        Location location=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(location!=null) {
+            for(Terminal terminal: terminalArrayList) { //모든 객체에 대해 거리 설정
+                terminal.getDistance(location.getLatitude(), location.getLongitude());
+            }
+            terminalArrayList=Terminal.sortTerminalListByDistance(terminalArrayList); //거리 기준으로 정렬
+            final ArrayList<String> terminalNms=new ArrayList<>();
+            final ArrayList<String> terminalCds=new ArrayList<>();
+            for(int i=0; i<3; i++) {
+                terminalNms.add(terminalArrayList.get(i).getTerminalName());
+                terminalCds.add(terminalArrayList.get(i).getTerminalCode());
+            }
+
+            searchResultTV.setText("추천");
+            ArrayAdapter adapter = new ArrayAdapter(SearchTerminalActivity.this, R.layout.support_simple_spinner_dropdown_item, terminalNms);
+            resultListView.setAdapter(adapter);
+            resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    terminalName = terminalNms.get(i);  //터미널 이름 설정
+                    terminalCode = terminalCds.get(i);  //터미널 코드 설정
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("tmnCd", terminalCode);
+                    resultIntent.putExtra("tmnNm", terminalName);
+                    setResult(RESULT_OK, resultIntent); //이전 액티비티에 데이터 넘겨줌
+                    finish();
+                }});
+        }
+
+    }
 
     public void back(View view) {
         finish();

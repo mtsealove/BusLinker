@@ -128,8 +128,15 @@ public class SearchExpressFragment extends Fragment {
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 registrationDate=""+i+"."+(i1+1)+"."+i2;
                 registrationTV.setText(i+"년 "+(i1+1)+"월 "+i2+"일");
+
+                //20190409 형식으로 설정
+                registrationDate=i+"";
+                if(i1+1<10) registrationDate+="0";
+                registrationDate+=(i1+1);
+                if(i2<10) registrationDate+="0";
+                registrationDate+=i2;
             }
-        },year, month, day);
+        },year, month-1, day);
         dialog.getDatePicker().setMinDate(date.getTime());
         dialog.show();
     }
@@ -143,7 +150,13 @@ public class SearchExpressFragment extends Fragment {
         int month=Integer.parseInt(monthFormat.format(date));
         int day=Integer.parseInt(dayFormat.format(date));
 
-        registrationDate=year+"."+month+"."+day;
+        //20190409 형식으로 설정
+        registrationDate=year+"";
+        if(month<10) registrationDate+="0";
+        registrationDate+=month;
+        if(day<10) registrationDate+="0";
+        registrationDate+=day;
+
         registrationTV.setText(year+"년"+month+"월"+day+"일");
     }
 

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
+    android:background="@drawable/background_list"
     android:paddingHorizontal="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingVertical="10dp"
     android:gravity="center">
 
     <TextView
@@ -27,11 +28,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:padding="15dp"
-        android:id="@+id/corpImage"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:src="@drawable/bus_kumho" />
 </LinearLayout>

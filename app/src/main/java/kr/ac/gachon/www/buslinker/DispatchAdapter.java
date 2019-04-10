@@ -46,20 +46,17 @@ public class DispatchAdapter extends BaseAdapter {
 
         TextView depTimeTV=convertView.findViewById(R.id.depTimeTV);
         TextView arrTimeTV=convertView.findViewById(R.id.arrTimeTV);
-        ImageView corpImage=convertView.findViewById(R.id.corpImage);
 
         DispatchItem dispatchItem=dispatchItemArrayList.get(position);
 
         depTimeTV.setText(dispatchItem.getDepTime());
         arrTimeTV.setText(dispatchItem.getArrTime());
-        corpImage.setImageDrawable(dispatchItem.getCorpIcon());
 
         return convertView;
     }
 
-    public void addItem(Drawable corpImage, String arrTime, String depTime) {
+    public void addItem( String arrTime, String depTime) {
         DispatchItem dispatchItem=new DispatchItem();
-        dispatchItem.setCorpIcon(corpImage);
         dispatchItem.setArrTime(arrTime);
         dispatchItem.setDepTime(depTime);
         dispatchItemArrayList.add(dispatchItem);

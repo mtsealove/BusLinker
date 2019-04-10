@@ -1,6 +1,7 @@
 package kr.ac.gachon.www.buslinker.Views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import kr.ac.gachon.www.buslinker.LoginActivity;
 import kr.ac.gachon.www.buslinker.R;
 
 public class SlideMenu extends RelativeLayout {
@@ -70,5 +72,16 @@ public class SlideMenu extends RelativeLayout {
         memberLayout.setVisibility(View.GONE);
         myAccountLayout.setVisibility(GONE);
 
+        loginLayout.setOnClickListener(new OnClickListener() {  //로그인 버튼 눌렀을 때
+            @Override
+            public void onClick(View view) {
+                Login();
+            }
+        });
+    }
+
+    private void Login() {  //로그인 액티비티로 이동
+        Intent intent=new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
     }
 }

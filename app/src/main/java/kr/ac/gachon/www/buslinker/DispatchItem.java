@@ -6,7 +6,6 @@ import android.widget.TextView;
 public class DispatchItem {
     private String depTime;
     private String arrTime;
-    private Drawable corpIcon;
 
     public String getDepTime() {
         return depTime;
@@ -22,13 +21,5 @@ public class DispatchItem {
 
     public void setArrTime(String arrTime) {
         this.arrTime = arrTime;
-    }
-
-    public Drawable getCorpIcon() {
-        return corpIcon;
-    }
-
-    public void setCorpIcon(Drawable corpIcon) {
-        this.corpIcon = corpIcon;
     }
 }
