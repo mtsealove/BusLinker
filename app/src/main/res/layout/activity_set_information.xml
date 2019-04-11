@@ -133,6 +133,7 @@
                         android:textSize="20sp" />
 
                     <EditText
+                        android:clickable="true"
                         android:id="@+id/depPersonNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -161,6 +162,7 @@
                         android:textSize="20sp" />
 
                     <EditText
+                        android:clickable="true"
                         android:id="@+id/depPersonContactET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -366,6 +368,7 @@
     </LinearLayout>
 
     <kr.ac.gachon.www.buslinker.Views.SlideMenu
+        android:id="@+id/slideMenu"
         android:layout_gravity="start"
         android:layout_width="300dp"
         android:layout_height="match_parent">

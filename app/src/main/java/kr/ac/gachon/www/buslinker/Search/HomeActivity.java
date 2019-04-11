@@ -22,11 +22,13 @@ import android.widget.TextView;
 import kr.ac.gachon.www.buslinker.Fragments.SearchExpressFragment;
 import kr.ac.gachon.www.buslinker.Fragments.SearchIntercityFragment;
 import kr.ac.gachon.www.buslinker.R;
+import kr.ac.gachon.www.buslinker.Views.SlideMenu;
 import kr.ac.gachon.www.buslinker.Views.SystemUiTuner;
 
-public class SearchRouteActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
     Button panelBtn;
     android.support.v4.widget.DrawerLayout drawerLayout;
+    SlideMenu slideMenu;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -38,10 +40,11 @@ public class SearchRouteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_route);
+        setContentView(R.layout.activity_home);
 
-        SystemUiTuner systemUiTuner=new SystemUiTuner(SearchRouteActivity.this);
+        SystemUiTuner systemUiTuner=new SystemUiTuner(HomeActivity.this);
         systemUiTuner.setStatusBarWhite();
+        slideMenu=findViewById(R.id.slideMenu);
         drawerLayout=findViewById(R.id.drawerLayout);
         panelBtn=findViewById(R.id.panelBtn);
         panelBtn.setOnClickListener(new View.OnClickListener() {
@@ -65,14 +68,14 @@ public class SearchRouteActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         //탭 글씨 크기
-        TextView tabText0=new TextView(SearchRouteActivity.this);   //고속버스용
+        TextView tabText0=new TextView(HomeActivity.this);   //고속버스용
         tabText0.setText("고속버스");
         tabText0.setTextSize(20);
         tabText0.setTextColor(Color.BLACK);
         tabText0.setGravity(Gravity.CENTER);
         tabLayout.getTabAt(0).setCustomView(tabText0);
 
-        TextView tabText1=new TextView(SearchRouteActivity.this);   //시외버스용
+        TextView tabText1=new TextView(HomeActivity.this);   //시외버스용
         tabText1.setText("시외버스");
         tabText1.setTextSize(20);
         tabText1.setTextColor(Color.BLACK);
@@ -162,5 +165,11 @@ public class SearchRouteActivity extends AppCompatActivity {
         public int getCount() {
             return 2;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        slideMenu.checkLogin();
     }
 }

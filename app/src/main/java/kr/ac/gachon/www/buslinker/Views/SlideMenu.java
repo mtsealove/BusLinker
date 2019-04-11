@@ -2,16 +2,27 @@ package kr.ac.gachon.www.buslinker.Views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import kr.ac.gachon.www.buslinker.Entity.Member;
 import kr.ac.gachon.www.buslinker.LoginActivity;
 import kr.ac.gachon.www.buslinker.R;
 
@@ -19,6 +30,7 @@ public class SlideMenu extends RelativeLayout {
     LinearLayout myAccountLayout;
     TextView recentDealTV, nameTV, prepareShipTV, shippingTV, shippedTV;    //사용자 정보로 표시될 텍스트
     RelativeLayout loginLayout, inquireDealLayout, publicNoticeLayout, checkChargeLayout, faqLayout, memberLayout;  //하단에 표시될 레이아웃
+    ImageView myAccountIcon;    //프로필 사진
     Button closeBtn;
     private Context context;
     public SlideMenu(Context context) {
@@ -55,6 +67,7 @@ public class SlideMenu extends RelativeLayout {
         closeBtn=view.findViewById(R.id.closeBtn);
         //로그인 했을 떄 보이는 뷰들
         myAccountLayout=view.findViewById(R.id.myAccountLayout);
+        myAccountIcon=view.findViewById(R.id.myAccountIcon);
         recentDealTV=view.findViewById(R.id.recentDealTV);
         nameTV=view.findViewById(R.id.nameTV);
         prepareShipTV=view.findViewById(R.id.prepareShipTV);
@@ -78,10 +91,61 @@ public class SlideMenu extends RelativeLayout {
                 Login();
             }
         });
+        checkLogin();
     }
 
     private void Login() {  //로그인 액티비티로 이동
         Intent intent=new Intent(context, LoginActivity.class);
         context.startActivity(intent);
+    }
+
+    public void checkLogin() {    //로그인 확인
+        if(Member.user!=null) { //로그인 되었을 때
+            memberLayout.setVisibility(View.VISIBLE);
+            myAccountLayout.setVisibility(View.VISIBLE);
+            loginLayout.setVisibility(View.GONE);
+
+            nameTV.setText(Member.user.getName());
+            setMyAccountIcon(Member.user.getProfileThumbPath());
+        } else {    //로그인 되지 않았을 때
+            memberLayout.setVisibility(View.GONE);
+            myAccountLayout.setVisibility(View.GONE);
+            loginLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void Logout() {  //로그아웃
+        Member.user=null;   //로그인된 객체 삭제
+        checkLogin();
+    }
+
+    Bitmap bitmap=null;
+    private void setMyAccountIcon(final String urlStr) { //URL에서 파일을 다운받아 실행
+
+        Thread thread=new Thread(){
+            @Override
+            public void run() {
+                try {
+                    URL url=new URL(urlStr);    //URL변환
+                    HttpURLConnection connection=(HttpURLConnection)url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+
+                    InputStream is=connection.getInputStream(); //읽어옴
+                    bitmap= BitmapFactory.decodeStream(is); //이미지로 변환
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+            myAccountIcon.setBackgroundDrawable(context.getDrawable(R.drawable.round_rectangle));
+            myAccountIcon.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

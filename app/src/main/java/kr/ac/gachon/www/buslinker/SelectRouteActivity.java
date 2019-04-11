@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +36,15 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 
+import kr.ac.gachon.www.buslinker.Views.SlideMenu;
 import kr.ac.gachon.www.buslinker.Views.SystemUiTuner;
 
 public class SelectRouteActivity extends AppCompatActivity {
     private String depTmnNm, depTmnCd, arrTmnNm, arrTmnCd, registrationDate, cat;
     TextView depTmnTV, arrTmnTV, dateTV, expressTV, intercityTV;
+    LinearLayout delayLayout;
     ListView dispatchLV;
+    SlideMenu slideMenu;
     ArrayList<String> arrPrdtTm, corpNm, depTm;
     Button nextBtn, prevBtn;
 
@@ -56,6 +60,8 @@ public class SelectRouteActivity extends AppCompatActivity {
         dispatchLV=findViewById(R.id.dispatchList);
         nextBtn=findViewById(R.id.nextBtn);
         prevBtn=findViewById(R.id.previousBtn);
+        delayLayout=findViewById(R.id.delayLayout);
+        slideMenu=findViewById(R.id.slideMenu);
 
         SystemUiTuner systemUiTuner=new SystemUiTuner(SelectRouteActivity.this);
         systemUiTuner.setStatusBarWhite();
@@ -108,6 +114,8 @@ public class SelectRouteActivity extends AppCompatActivity {
     }
 
     private void getExpress() { //고속버스 데이터를 가져옴
+        delayLayout.setVisibility(View.VISIBLE);
+        dispatchLV.setVisibility(View.GONE);
         arrPrdtTm=new ArrayList<>();
         corpNm=new ArrayList<>();
         depTm=new ArrayList<>();
@@ -175,6 +183,8 @@ public class SelectRouteActivity extends AppCompatActivity {
                                 dispatchAdapter.addItem( arr, dep);
                             }
                             dispatchLV.setAdapter(dispatchAdapter);
+                            dispatchLV.setVisibility(View.VISIBLE);
+                            delayLayout.setVisibility(View.GONE);
                             dispatchLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -374,5 +384,11 @@ public class SelectRouteActivity extends AppCompatActivity {
         });
         dialog.show();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        slideMenu.checkLogin();
     }
 }

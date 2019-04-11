@@ -223,7 +223,7 @@ public class SearchTerminalActivity extends AppCompatActivity {
             terminalArrayList=Terminal.sortTerminalListByDistance(terminalArrayList); //거리 기준으로 정렬
             final ArrayList<String> terminalNms=new ArrayList<>();
             final ArrayList<String> terminalCds=new ArrayList<>();
-            for(int i=0; i<3; i++) {
+            for(int i=0; i<10; i++) {
                 terminalNms.add(terminalArrayList.get(i).getTerminalName());
                 terminalCds.add(terminalArrayList.get(i).getTerminalCode());
             }

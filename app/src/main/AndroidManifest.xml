@@ -2,12 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.ac.gachon.www.buslinker">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".Kakao.GlobalApplication"
@@ -18,17 +16,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Kakao.KakaoLoginActivity"></activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
-        <activity android:name=".SignUpActivity"></activity>
+
+        <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SetInformationActivity" />
         <activity android:name=".SelectRouteActivity" />
         <activity android:name=".Search.SearchTerminalActivity" />
         <activity
-            android:name=".Search.SearchRouteActivity"
+            android:name=".Search.HomeActivity"
             android:label="@string/title_activity_search_route"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoadActivity">

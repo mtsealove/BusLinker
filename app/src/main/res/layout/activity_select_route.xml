@@ -224,16 +224,39 @@
             android:layerType="software"/>
 
         <ListView
+            android:visibility="gone"
             android:id="@+id/dispatchList"
             android:divider="@drawable/dashline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerHeight="1.5dp"
-            android:layerType="software"></ListView>
+            android:layerType="software"/>
+
+        <LinearLayout
+            android:id="@+id/delayLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:layout_marginTop="20dp"
+                android:text="결과를 검색중입니다"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ProgressBar
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <kr.ac.gachon.www.buslinker.Views.SlideMenu
+        android:id="@+id/slideMenu"
         android:layout_gravity="start"
         android:layout_width="300dp"
         android:layout_height="match_parent"></kr.ac.gachon.www.buslinker.Views.SlideMenu>

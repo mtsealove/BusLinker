@@ -1,16 +1,20 @@
 package kr.ac.gachon.www.buslinker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import kr.ac.gachon.www.buslinker.Entity.Member;
+import kr.ac.gachon.www.buslinker.Views.SlideMenu;
 import kr.ac.gachon.www.buslinker.Views.SystemUiTuner;
 
 public class SetInformationActivity extends AppCompatActivity {
@@ -18,6 +22,7 @@ public class SetInformationActivity extends AppCompatActivity {
     private double X, Y, Z, weight;
     EditText depPersonNameET, depPersonContactET, arrPersonNameET, arrPersonContactET;
     TextView arrTmnNmTV, depTmnNmTV, timeTV, freightInfoTV;
+    SlideMenu slideMenu;
     RelativeLayout checkPayLayout;
 
 
@@ -34,6 +39,7 @@ public class SetInformationActivity extends AppCompatActivity {
         depPersonContactET=findViewById(R.id.depPersonContactET);
         arrPersonNameET=findViewById(R.id.arrPersonNameET);
         arrPersonContactET=findViewById(R.id.arrPersonContactET);
+        slideMenu=findViewById(R.id.slideMenu);
 
         SystemUiTuner systemUiTuner=new SystemUiTuner(SetInformationActivity.this);
         systemUiTuner.setStatusBarWhite();
@@ -50,6 +56,30 @@ public class SetInformationActivity extends AppCompatActivity {
         //전화번호 양식
         depPersonContactET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         arrPersonContactET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+        if(Member.user!=null)   //만약 로그인되어 있다면
+            depPersonNameET.setText(Member.user.getName()); //사용자 이름을 우선적으로 설정
+        ReadPhoneNumber();
+
+        depPersonNameET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(depPersonNameET.getText().toString().length()!=0) {
+                    depPersonNameET.setText("");
+                    depPersonNameET.setOnClickListener(null);
+                }
+            }
+        });
+
+        depPersonContactET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(depPersonContactET.getText().toString().length()!=0) {
+                    depPersonContactET.setText("");
+                    depPersonContactET.setOnClickListener(null);
+                }
+            }
+        });
     }
 
     private void getParameter(){    //이전액티비티에서 정보를 읽어옴
@@ -88,5 +118,20 @@ public class SetInformationActivity extends AppCompatActivity {
 
         AlertDialog dialog=builder.create();
         dialog.show();
+    }
+
+    private void ReadPhoneNumber() {    //전화번호 읽어서 입력
+        TelephonyManager telManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String PhoneNum = telManager.getLine1Number();
+        if(PhoneNum.startsWith("+82")){
+            PhoneNum = PhoneNum.replace("+82", "0");
+        }
+        depPersonContactET.setText(PhoneNum);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        slideMenu.checkLogin();
     }
 }
