@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -120,32 +121,38 @@ public class SlideMenu extends RelativeLayout {
     }
 
     Bitmap bitmap=null;
-    private void setMyAccountIcon(final String urlStr) { //URL에서 파일을 다운받아 실행
 
-        Thread thread=new Thread(){
-            @Override
-            public void run() {
-                try {
-                    URL url=new URL(urlStr);    //URL변환
-                    HttpURLConnection connection=(HttpURLConnection)url.openConnection();
-                    connection.setDoInput(true);
-                    connection.connect();
+    private void setMyAccountIcon(final Object urlStr) { //URL에서 파일을 다운받아 실행
 
-                    InputStream is=connection.getInputStream(); //읽어옴
-                    bitmap= BitmapFactory.decodeStream(is); //이미지로 변환
+        if (urlStr instanceof String) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL((String) urlStr);    //URL변환
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setDoInput(true);
+                        connection.connect();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        InputStream is = connection.getInputStream(); //읽어옴
+                        bitmap = BitmapFactory.decodeStream(is); //이미지로 변환
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+            };
+            thread.start();
+            try {
+                thread.join();
+                myAccountIcon.setBackgroundDrawable(context.getDrawable(R.drawable.round_rectangle));
+                myAccountIcon.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        };
-        thread.start();
-        try {
-            thread.join();
-            myAccountIcon.setBackgroundDrawable(context.getDrawable(R.drawable.round_rectangle));
-            myAccountIcon.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else if (urlStr instanceof Uri) {
+            System.out.print("URI입니다");
+            myAccountIcon.setImageURI((Uri) urlStr);
         }
     }
 }

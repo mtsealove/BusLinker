@@ -8,4 +8,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="kakao_app_key">f1bb23a2ba56f4025a7b56480b47e541</string>
+    <string name="facebook_app_key">569480083537181</string>
 </resources>

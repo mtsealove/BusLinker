@@ -82,7 +82,7 @@
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/background_login"
-        android:text="로그인"
+        android:text="BusLinker ID로 로그인"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -92,6 +92,14 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="20dp"></com.kakao.usermgmt.LoginButton>
+
+    <com.facebook.login.widget.LoginButton
+
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="40dp"
+        android:id="@+id/facebookLoginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
 
     <Button
         android:layout_gravity="bottom"
