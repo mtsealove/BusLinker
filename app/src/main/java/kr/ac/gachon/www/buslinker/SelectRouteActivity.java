@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -144,7 +145,7 @@ public class SelectRouteActivity extends AppCompatActivity {
                         InputStream is = url.openStream();
                         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                         XmlPullParser xmlPullParser = factory.newPullParser();
-                        xmlPullParser.setInput(new InputStreamReader(is, "UTF-8"));
+                        xmlPullParser.setInput(new InputStreamReader(is, StandardCharsets.UTF_8));
 
                         String tag;
                         xmlPullParser.next();
@@ -180,7 +181,12 @@ public class SelectRouteActivity extends AppCompatActivity {
                                 String arr=arrPrdtTm.get(i);
                                 System.out.println("출발시간: "+dep);
                                 System.out.println("도착시간: "+arr);
-                                dispatchAdapter.addItem( arr, dep);
+                                if (IsNextDispatch(dep)) //나중이면 표시
+                                    dispatchAdapter.addItem(arr, dep);
+                                else {  //아니면 제거
+                                    depTm.remove(i);
+                                    arrPrdtTm.remove(i);
+                                }
                             }
                             dispatchLV.setAdapter(dispatchAdapter);
                             dispatchLV.setVisibility(View.VISIBLE);
@@ -202,6 +208,22 @@ public class SelectRouteActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    private boolean IsNextDispatch(String depTime) {   //현재 시간보다 나중인지 반환
+        long now = System.currentTimeMillis();    //현재시간
+        Date date = new Date(now);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh시 mm분");
+        String timeNow = simpleDateFormat.format(date);
+
+        int hourNow = Integer.parseInt(timeNow.substring(0, 2));
+        int minNow = Integer.parseInt(timeNow.substring(4, 6));
+        int hour = Integer.parseInt(depTime.substring(0, 2));
+        int min = Integer.parseInt(depTime.substring(4, 6));
+        if (hour > hourNow) {   //시간 자체가 높으면
+            return true;
+        } else //시간은 같고 분이 나중이면
+            return hour == hourNow && min >= minNow;
     }
 
     private void nextDate() {
