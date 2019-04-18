@@ -5,9 +5,21 @@ public class Member {
     public static Member user;   //현재 로그인된 계정
     String email;
     String name;
+    String gender;
+    String birth;
     String profilePath;
     Object profileThumbPath;
     int category;
+
+    public Member(String email, String name, String gender, String birth, int category, String profilePath) {
+        this.email = email;
+        this.name = name;
+        this.gender = gender;
+        this.birth = birth;
+        this.category = category;
+        this.profilePath = profilePath;
+    }
+
 
     public Member(String email, String name, int category) {  //프로필 사진이 있을 경우
         this.email=email;

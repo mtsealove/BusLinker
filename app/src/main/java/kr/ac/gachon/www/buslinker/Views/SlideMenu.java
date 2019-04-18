@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -21,16 +20,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import kr.ac.gachon.www.buslinker.Entity.CustomAlert;
 import kr.ac.gachon.www.buslinker.Entity.Member;
-import kr.ac.gachon.www.buslinker.LoginActivity;
+import kr.ac.gachon.www.buslinker.Account.LoginActivity;
 import kr.ac.gachon.www.buslinker.R;
 
 public class SlideMenu extends RelativeLayout {
     LinearLayout myAccountLayout;
     TextView recentDealTV, nameTV, prepareShipTV, shippingTV, shippedTV;    //사용자 정보로 표시될 텍스트
-    RelativeLayout loginLayout, inquireDealLayout, publicNoticeLayout, checkChargeLayout, faqLayout, memberLayout;  //하단에 표시될 레이아웃
+    RelativeLayout loginLayout, inquireDealLayout, publicNoticeLayout, checkChargeLayout, faqLayout, memberLayout, logoutLayout;  //하단에 표시될 레이아웃
     ImageView myAccountIcon;    //프로필 사진
     Button closeBtn;
     private Context context;
@@ -81,8 +79,10 @@ public class SlideMenu extends RelativeLayout {
         publicNoticeLayout=view.findViewById(R.id.noticeLayout);
         checkChargeLayout=view.findViewById(R.id.check_chargeLayout);
         faqLayout=view.findViewById(R.id.faqLayout);
+        logoutLayout = view.findViewById(R.id.logoutLayout);
 
         loginLayout.setVisibility(View.VISIBLE);
+        logoutLayout.setVisibility(GONE);
         memberLayout.setVisibility(View.GONE);
         myAccountLayout.setVisibility(GONE);
 
@@ -90,6 +90,12 @@ public class SlideMenu extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 Login();
+            }
+        });
+        logoutLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Logout();
             }
         });
         checkLogin();
@@ -105,6 +111,7 @@ public class SlideMenu extends RelativeLayout {
             memberLayout.setVisibility(View.VISIBLE);
             myAccountLayout.setVisibility(View.VISIBLE);
             loginLayout.setVisibility(View.GONE);
+            logoutLayout.setVisibility(VISIBLE);
 
             nameTV.setText(Member.user.getName());
             setMyAccountIcon(Member.user.getProfileThumbPath());
@@ -112,12 +119,20 @@ public class SlideMenu extends RelativeLayout {
             memberLayout.setVisibility(View.GONE);
             myAccountLayout.setVisibility(View.GONE);
             loginLayout.setVisibility(View.VISIBLE);
+            logoutLayout.setVisibility(GONE);
         }
     }
 
     public void Logout() {  //로그아웃
-        Member.user=null;   //로그인된 객체 삭제
-        checkLogin();
+        final CustomAlert customAlert = new CustomAlert(context);
+        customAlert.DialogChoice("로그아웃", "로그아웃하시겠습니까?", new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Member.user = null;   //로그인된 객체 삭제
+                checkLogin();
+                customAlert.cancelDialog();
+            }
+        });
     }
 
     Bitmap bitmap=null;

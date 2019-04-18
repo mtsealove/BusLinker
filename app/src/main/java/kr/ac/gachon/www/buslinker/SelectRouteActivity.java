@@ -213,7 +213,7 @@ public class SelectRouteActivity extends AppCompatActivity {
     private boolean IsNextDispatch(String depTime) {   //현재 시간보다 나중인지 반환
         long now = System.currentTimeMillis();    //현재시간
         Date date = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh시 mm분");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH시 mm분");
         String timeNow = simpleDateFormat.format(date);
 
         int hourNow = Integer.parseInt(timeNow.substring(0, 2));

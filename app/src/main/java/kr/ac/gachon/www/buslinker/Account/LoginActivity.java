@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.buslinker;
+package kr.ac.gachon.www.buslinker.Account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
 import com.facebook.Profile;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
@@ -33,12 +32,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import kr.ac.gachon.www.buslinker.Entity.Member;
 import kr.ac.gachon.www.buslinker.Facebook.FacebookLoginCallback;
-import kr.ac.gachon.www.buslinker.Kakao.KakaoLoginActivity;
+import kr.ac.gachon.www.buslinker.R;
 import kr.ac.gachon.www.buslinker.Views.SystemUiTuner;
 
 public class LoginActivity extends AppCompatActivity {
@@ -114,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "비밀번호를 입력하세요", Toast.LENGTH_SHORT).show();
         else {
             GetData getData = new GetData();
-            getData.execute(ID);
+            getData.execute(ID, password);
         }
     }
 
@@ -200,14 +198,18 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {   //결과를 가지고 왔을 떄
             progressDialog.dismiss();
             super.onPostExecute(result);
-            GetMember(result);
+
+            if (result.equals("NoExist"))
+                Toast.makeText(LoginActivity.this, "로그인에 실패하였습니다", Toast.LENGTH_SHORT).show();
+            else GetMember(result);
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            String keyword = strings[0];
-            String serverUrl = "http://192.168.10.26/GetID.php";
-            String parameter = "email=" + keyword;
+            String Email = strings[0];
+            String Password = strings[1];
+            String serverUrl = "http://192.168.10.26/GetMember.php";
+            String parameter = "Email=" + Email + "&Password=" + Password;
             HttpURLConnection connection = null;
             try {
                 URL url = new URL(serverUrl);
@@ -254,15 +256,15 @@ public class LoginActivity extends AppCompatActivity {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
-                String email = item.getString("email");
-                String name = item.getString("name");
-                String profilePath = item.getString("profilePath");
-                String password = item.getString("password");
-                if (this.password.equals(password)) {
-                    Member.user = new Member(email, name, profilePath, profilePath, 2);
-                    Log.e("계정정보: ", Member.user.toString());
-                    finish();
-                }
+                String email = item.getString("Email");
+                String name = item.getString("Name");
+                String profilePath = item.getString("ProfilePath");
+                String birth = item.getString("Birth");
+                String gender = item.getString("Gender");
+                int category = Integer.parseInt(item.getString("Category"));
+                Member.user = new Member(email, name, gender, birth, category, profilePath);
+                Log.e("계정정보: ", Member.user.toString());
+                finish();
 
             }
         } catch (Exception e) {

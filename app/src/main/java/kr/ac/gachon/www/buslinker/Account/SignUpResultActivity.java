@@ -1,20 +1,15 @@
-package kr.ac.gachon.www.buslinker.Kakao;
+package kr.ac.gachon.www.buslinker.Account;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import kr.ac.gachon.www.buslinker.R;
 
-public class KakaoLoginActivity extends AppCompatActivity {
+public class SignUpResultActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kakao_login);
-
-
+        setContentView(R.layout.activity_sign_up_result);
     }
-
-
-
 }

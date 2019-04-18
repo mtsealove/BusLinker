@@ -34,9 +34,6 @@ public class UploadDataActivity extends AppCompatActivity { //데이터를 DB에
         setContentView(R.layout.activity_upload_data);
 
         getParameter();
-
-        InsertData insertData = new InsertData();
-        insertData.execute(MemberID, DepTerminal, ArrTerminal, SendPersonName, SendPersonNumber, ReceivePersonName, ReceivePersonNumber, DeliveryTime, Integer.toString(Side), Integer.toString(Weight), PayMethod, Message, PayTime, Integer.toString(Price));
     }
 
     private void getParameter() {   //파라미터들을 받아옴
@@ -54,15 +51,22 @@ public class UploadDataActivity extends AppCompatActivity { //데이터를 DB에
         Weight = intent.getIntExtra("Weight", 0);
         Price = intent.getIntExtra("Price", 0);
 
+
         //만들기
-        if (Member.user == null) MemberID = "anonymous";    //로그인되지 않았으면 익명
-        else MemberID = Member.user.getEmail(); //로그인 되었다면 사용자의 메일 주소
+        MemberID = Member.user.getEmail();
+        if (MemberID == null) MemberID = "anonymous";    //로그인되지 않았으면 익명
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         PayTime = simpleDateFormat.format(date);
 
+        Post();
+    }
+
+    private void Post() {
+        InsertData insertData = new InsertData();
+        insertData.execute(MemberID, DepTerminal, ArrTerminal, SendPersonName, SendPersonNumber, ReceivePersonName, ReceivePersonNumber, DeliveryTime, Integer.toString(Side), Integer.toString(Weight), PayMethod, Message, PayTime, Integer.toString(Price));
     }
 
     class InsertData extends AsyncTask<String, Void, String> {

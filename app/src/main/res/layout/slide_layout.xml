@@ -197,6 +197,7 @@
 
     <!--메뉴 표시 레이아웃-->
     <LinearLayout
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
@@ -212,7 +213,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_marginVertical="15dp"
+                android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="20dp"
                 android:id="@+id/loginIcon"
                 android:layout_width="25dp"
@@ -226,7 +227,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/loginIcon"
                 android:text="로그인"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layerType="software"
@@ -247,9 +248,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="12dp"
                 android:src="@drawable/inquire_deal" />
 
             <TextView
@@ -259,7 +260,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/inquireIcon"
                 android:text="거래조회"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layerType="software"
@@ -280,9 +281,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="12dp"
                 android:src="@drawable/member_icon" />
 
             <TextView
@@ -292,7 +293,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/memberIcon"
                 android:text="회원정보"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layerType="software"
@@ -313,9 +314,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="12dp"
                 android:src="@drawable/public_notice" />
 
             <TextView
@@ -326,7 +327,7 @@
                 android:layout_toRightOf="@id/NoticeIcon"
                 android:layerType="software"
                 android:text="공지사항"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layerType="software"
@@ -347,9 +348,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="12dp"
                 android:src="@drawable/check_price" />
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -359,7 +360,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/CheckChargeIcon"
                 android:text="요금표 확인"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layerType="software"
@@ -380,9 +381,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="12dp"
                 android:src="@drawable/faq" />
 
             <TextView
@@ -392,7 +393,39 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/FAQIcon"
                 android:text="FAQ"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <!--로그아웃-->
+        <RelativeLayout
+            android:id="@+id/logoutLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@drawable/dashline" />
+
+            <ImageView
+                android:id="@+id/logoutIcon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/logout" />
+
+            <TextView
+                android:id="@+id/logoutText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/logoutIcon"
+                android:text="로그아웃"
+                android:textSize="17sp" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
