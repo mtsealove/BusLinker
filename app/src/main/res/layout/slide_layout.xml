@@ -167,11 +167,10 @@
                 android:textSize="18sp"
                 android:textColor="@color/black"/>
 
-            <ImageView
+            <View
                 android:layout_width="1.5dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/dashline"
-                android:layerType="software"/>
+                android:layout_height="50dp"
+                android:background="@color/light_gray" />
 
             <TextView
                 android:gravity="center"
@@ -182,6 +181,11 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/black"/>
+
+            <View
+                android:layout_width="1.5dp"
+                android:layout_height="50dp"
+                android:background="@color/light_gray" />
 
             <TextView
                 android:id="@+id/shippedTV"

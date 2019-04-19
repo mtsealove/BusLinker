@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import kr.ac.gachon.www.buslinker.Account.DealLogListActivity;
 import kr.ac.gachon.www.buslinker.Entity.CustomAlert;
 import kr.ac.gachon.www.buslinker.Entity.Member;
 import kr.ac.gachon.www.buslinker.Account.LoginActivity;
@@ -98,6 +99,12 @@ public class SlideMenu extends RelativeLayout {
                 Logout();
             }
         });
+        inquireDealLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InquireLog();
+            }
+        });
         checkLogin();
     }
 
@@ -115,6 +122,7 @@ public class SlideMenu extends RelativeLayout {
 
             nameTV.setText(Member.user.getName());
             setMyAccountIcon(Member.user.getProfileThumbPath());
+            recentDealTV.setText("최근거래: " + Member.user.GetRecentDealCount() + "건");
         } else {    //로그인 되지 않았을 때
             memberLayout.setVisibility(View.GONE);
             myAccountLayout.setVisibility(View.GONE);
@@ -169,5 +177,10 @@ public class SlideMenu extends RelativeLayout {
             System.out.print("URI입니다");
             myAccountIcon.setImageURI((Uri) urlStr);
         }
+    }
+
+    private void InquireLog() { //거래내역 조회
+        Intent intent = new Intent(getContext(), DealLogListActivity.class);
+        context.startActivity(intent);
     }
 }

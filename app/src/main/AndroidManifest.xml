@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Account.SignUpResultActivity"></activity>
+        <activity android:name=".Account.DealLogDetailActivity"></activity>
+        <activity android:name=".Account.DealLogListActivity" />
+        <activity android:name=".Account.SignUpResultActivity" />
         <activity android:name=".UploadDataActivity" />
         <activity android:name=".Kakao.KakaoLoginActivity" /> <!-- 카카오톡 메타데이터 -->
         <meta-data

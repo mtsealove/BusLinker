@@ -32,8 +32,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
+import kr.ac.gachon.www.buslinker.Entity.DealLog;
 import kr.ac.gachon.www.buslinker.Entity.Member;
 import kr.ac.gachon.www.buslinker.Facebook.FacebookLoginCallback;
 import kr.ac.gachon.www.buslinker.R;
@@ -147,6 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -249,7 +253,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void GetMember(String result) { //결과로 데이터 파싱
+    private void GetMember(String result) { //리턴 결과로 계정 생성
         try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray(",iser");
@@ -263,10 +267,123 @@ public class LoginActivity extends AppCompatActivity {
                 String gender = item.getString("Gender");
                 int category = Integer.parseInt(item.getString("Category"));
                 Member.user = new Member(email, name, gender, birth, category, profilePath);
-                Log.e("계정정보: ", Member.user.toString());
-                finish();
-
+                ExecuteLog(email);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void ExecuteLog(String email) { //거래내역 쿼리 실행
+        GetLog getLog = new GetLog();
+        getLog.execute(email);
+    }
+
+    private class GetLog extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() { //연결 준비 중
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(LoginActivity.this, "거래내역을 조회중입니다", null, true, true);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {   //결과를 가지고 왔을 떄
+            progressDialog.dismiss();
+            super.onPostExecute(result);
+
+            if (result.equals("NoExist"))
+                Toast.makeText(LoginActivity.this, "거래내역 없음", Toast.LENGTH_SHORT).show();
+            else CreateLog(result);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String Email = strings[0];
+            String serverUrl = "http://192.168.10.26/GetLogByID.php";
+            String parameter = "Email=" + Email;
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(serverUrl);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(5000);
+                connection.setConnectTimeout(5000);
+                connection.setRequestMethod("POST");
+                connection.connect();
+
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(parameter.getBytes(StandardCharsets.UTF_8));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseCode = connection.getResponseCode();
+                InputStream inputStream;
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = connection.getInputStream();
+                } else inputStream = connection.getErrorStream();
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuffer sb = new StringBuffer();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                inputStreamReader.close();
+                inputStream.close();
+                connection.disconnect();
+                return sb.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Err: " + e.getMessage();
+            }
+        }
+    }
+
+    private void CreateLog(String result) { //리턴 결과로 거래내역 생성
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(",iser");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                //데이터 파싱
+                JSONObject item = jsonArray.getJSONObject(i);
+                int LogID = item.getInt("LogID");
+                String MemberID = item.getString("MemberID");
+                String DepTerminal = item.getString("DepTerminal");
+                String ArrTerminal = item.getString("ArrTerminal");
+                String SendPersonName = item.getString("SendPersonName");
+                String SendPersonNumber = item.getString("SendPersonNumber");
+                String ReceivePersonName = item.getString("ReceivePersonName");
+                String ReceivePersonNumber = item.getString("ReceivePersonNumber");
+                Date DeliveryTime = simpleDateFormat.parse(item.getString("DeliveryTime"));
+                int Side = item.getInt("Side");
+                int Weight = item.getInt("Weight");
+                String PayMethod = item.getString("PayMethod");
+                String Message = null;
+                try {
+                    Message = item.getString("Message");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Date PayTime = simpleDateFormat.parse(item.getString("PayTime"));
+                int Price = item.getInt("Price");
+                String State = null;
+                try {
+                    State = item.getString("State");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                DealLog dealLog = new DealLog(LogID, MemberID, DepTerminal, ArrTerminal, SendPersonName, SendPersonNumber, ReceivePersonName, ReceivePersonNumber, DeliveryTime, Side, Weight, PayMethod, Message, PayTime, Price, State);
+                Member.user.AddDealLog(dealLog);    //거래내역 객체 생성 및 추가
+                Toast.makeText(getApplicationContext(), "객체 " + i + "개 생성", Toast.LENGTH_SHORT).show();
+            }
+            Log.e("계정정보: ", Member.user.toString());
+            finish();
         } catch (Exception e) {
             e.printStackTrace();
         }
